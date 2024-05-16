@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-// import "./globals.css";
+import './globals.css'
 import '@mantine/core/styles.css';
 import {theme} from "../../theme"
 
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import Header from "../../components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,13 +24,17 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.svg" />
+        <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet" />
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          {/* <Header/> */}
+          {children}
+          </MantineProvider>
       </body>
     </html>
   );

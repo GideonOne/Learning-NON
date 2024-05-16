@@ -1,11 +1,12 @@
-import Image from "next/image";
-import { ColorSchemeToggle } from "../../components/colortest";
-// import styles from "./page.module.css";
+import { AppProps } from "next/app";
+import Header from "../../components/Header";
+import Main from "../../components/Main";
 
-export default function Home() {
+export default function Home({ Component, pageProps } : AppProps) {
   return (
-    <>
-      <ColorSchemeToggle/>
-    </>
+    <div>
+      <Header/>
+      <Main/>
+    </div>
   );
 }
