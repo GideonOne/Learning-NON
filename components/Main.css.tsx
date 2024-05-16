@@ -1,10 +1,11 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '../theme';
+import { buttonDefault } from '@/app/globals.css';
 
 export const imageSections = style({
     width: '100%',
     height: 680,
-    backgroundImage: "url('/landing/livingroom.jpeg')",
+    backgroundImage: "url('/images/livingroom.jpeg')",
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -13,18 +14,23 @@ export const imageSections = style({
 
 export const body = style({
     width: '90vw',
-    height: '100vh',
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: vars.colors.white[0],
     marginTop: '38rem',
     borderRadius: '20px 20px 0 0',
-    padding: '1rem 0',
+    padding: '1rem 0 5rem',
+    zIndex: 1,
     // boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
 })
 
 export const subBody = style({
-    padding: '0 2rem',
+    padding: '0 2rem 2rem',
+})
+
+export const itemContainer = style({
+    display: 'flex',
+    flexWrap: 'wrap',
 })
 
 export const title = style({
@@ -34,8 +40,14 @@ export const title = style({
     marginBottom: '2rem'
 })
 
-export const buttonCat = style({
+export const buttonActive = style({
     padding: '0.5rem 1.5rem',
-    fontSize: 16,
-    fontWeight: 500,
-})
+    color: vars.colors.white[0],
+    backgroundColor: vars.colors.black[0],
+}) + ' ' + buttonDefault;
+
+export const buttonInActive = style({
+    padding: '0.5rem 1.5rem',
+    // color: vars.colors.white[0],
+    // backgroundColor: vars.colors.black[0],
+}) + ' ' + buttonDefault;

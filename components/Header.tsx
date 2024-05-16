@@ -26,7 +26,7 @@ const Header: React.FC = () => {
                                     stroke={1.7}
                                 />
                             </Link>
-                            <Button className={classes.buttonLogin} color="black" variant='filled' radius='xl' onClick={open}>Login</Button>
+                            <Button className={classes.buttonLogin} color="gray" variant='filled' radius='xl' onClick={open}>Login</Button>
                         </Group>
                     </Group>
                 </div>

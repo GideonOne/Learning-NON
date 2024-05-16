@@ -1,7 +1,6 @@
-"use client"
-
 import { style } from '@vanilla-extract/css';
 import { vars } from '../theme';
+import { buttonDefault } from '@/app/globals.css';
 
 export const header = style({
     display: 'flex',
@@ -38,9 +37,9 @@ export const titleSub = style({
 
 export const buttonLogin = style({
     padding: '0.5rem 3rem',
-    fontSize: 16,
-    fontWeight: 500,
-})
+    color: vars.colors.white[0],
+    backgroundColor: vars.colors.black[0],
+}) + ' ' + buttonDefault
 
 export const navItems = style({
     display: 'flex',
