@@ -1,14 +1,11 @@
 import { AppProps } from "next/app";
-import Header from "../../components/Header";
-import Main from "../../components/Main";
-import Footer from "../../components/Footer";
+import Main from "../../components/main/main";
+import CustomLayout from "./customLayout";
 
 export default function Home({ Component, pageProps } : AppProps) {
   return (
-    <main>
-      <Header/>
+    <CustomLayout>
       <Main/>
-      <Footer/>
-    </main>
+    </CustomLayout>
   );
 }

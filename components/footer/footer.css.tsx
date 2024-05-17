@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../theme';
+import { vars } from '../../theme';
 
 export const footer = style({
     left: 0,

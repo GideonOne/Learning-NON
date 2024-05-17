@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import * as classes from "./Footer.css";
+import * as classes from "./footer.css";
 import { Group } from "@mantine/core";
 import Link from "next/link";
 

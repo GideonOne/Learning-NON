@@ -7,6 +7,7 @@ export const container = style({
     flexDirection: 'column',
     marginBottom: '3rem',
     width: 350,
+    position: 'relative',
 })
 
 export const upperPart = style({
@@ -53,7 +54,7 @@ export const remaining = style({
 })
 
 export const buttonContainer = style({
-    marginTop: '1rem',
+    padding: '1rem 1.2rem 0'
 })
 
 export const buttonCart = style({

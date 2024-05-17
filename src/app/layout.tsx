@@ -5,7 +5,7 @@ import '@mantine/core/styles.css';
 import {theme} from "../../theme"
 
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
-import Header from "../../components/Header";
+import Header from "../../components/header/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,7 +32,6 @@ export default function RootLayout({
       </head>
       <body>
         <MantineProvider theme={theme}>
-          {/* <Header/> */}
           {children}
           </MantineProvider>
       </body>
