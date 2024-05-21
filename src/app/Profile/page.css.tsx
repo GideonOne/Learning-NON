@@ -70,8 +70,18 @@ export const textInput = style({
 })
 
 export const buttonEdit = style({
+    width: '10rem',
+    marginTop: '5rem',
     fontWeight: 'bold',
-    position: 'absolute',
+    backgroundColor: vars.colors.black[2],
+    right: 0
+}) + ' ' + buttonDefault
+
+export const buttonCancel = style({
+    backgroundColor: vars.colors.red[2],
+}) + ' ' + buttonEdit
+
+export const buttonLogout = style({
     backgroundColor: vars.colors.black[2],
     right: 0
 }) + ' ' + buttonDefault

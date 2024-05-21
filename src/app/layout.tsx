@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import './globals.css'
 import '@mantine/core/styles.css';
-import {theme} from "../../theme"
+import { theme } from "../../theme"
 
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
-import Header from "../../components/header/header";
+import { AppProvider } from "../../context/appContext";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const inter = Inter({ subsets: ["latin"] });
+const queryClient = new QueryClient();
 
 export const metadata: Metadata = {
   title: "E-Comm",
@@ -31,9 +33,13 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>
-          {children}
+        {/* <QueryClientProvider client={queryClient}> */}
+          <MantineProvider theme={theme}>
+            <AppProvider>
+              {children}
+            </AppProvider>
           </MantineProvider>
+        {/* </QueryClientProvider> */}
       </body>
     </html>
   );

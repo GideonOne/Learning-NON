@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../../theme'
+import { vars } from '../../../theme'
 import { buttonDefault } from '@/app/globals.css';
 
 export const container = style({
@@ -26,12 +26,15 @@ export const lowerPart = style({
 })
 
 export const cover = style({
-    width: '100%',
+    width: 'auto',
     height: 150,
-    position: 'relative'
+    position: 'relative',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat'
 })
 
-export const tag= style({
+export const tag = style({
     position: 'absolute',
     backgroundColor: vars.colors.white[0],
     borderWidth: 1,
@@ -40,7 +43,7 @@ export const tag= style({
     borderRadius: 20,
     zIndex: 1,
     top: 10,
-    right: 10,
+    right: 10
 })
 
 export const title = style({
