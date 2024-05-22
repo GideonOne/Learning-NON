@@ -7,7 +7,6 @@ import * as classes from './header.css'
 import { IconShoppingCart } from '@tabler/icons-react';
 import Login from '../auth/login';
 import Cart from '../cart/cart';
-import { useAppContext } from '../../context/appContext';
 
 const Header: React.FC = () => {
     const [modalLogin, setModalLogin] = useState(false);
@@ -15,17 +14,22 @@ const Header: React.FC = () => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const {state} = useAppContext();
+    const userJson = localStorage.getItem("user");
+    const storedUser = userJson ? JSON.parse(userJson) : null;
 
     useEffect(() => {
-        const loggedInStatus = state.user;
-        setIsLoggedIn(!!loggedInStatus); // Convert to boolean
-    }, [state.user]);
+        if (storedUser) {
+            setIsLoggedIn(true);
+        }
+        else {
+            setIsLoggedIn(false);
+        }
+    }, [storedUser]);
 
     return (
         <nav>
             <Login opened={modalLogin} onClose={() => { setModalLogin(false) }} />
-            <Cart opened={drawerCart} onClose={() => {setDrawerCart(false)}}/>
+            <Cart opened={drawerCart} onClose={() => { setDrawerCart(false) }} />
             <header className={classes.header}>
                 <div className={classes.body}>
                     <Group justify='space-between'>

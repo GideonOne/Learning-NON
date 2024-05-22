@@ -28,6 +28,13 @@ export const subBody = style({
     padding: '0 2rem 2rem',
 })
 
+export const loadingContainer = style({
+    position: 'relative',
+    width: '100%',
+    height: "100vh"
+})
+
+
 export const itemContainer = style({
     display: 'flex',
     flexWrap: 'wrap',
@@ -51,3 +58,7 @@ export const buttonInActive = style({
     // color: vars.colors.white[0],
     // backgroundColor: vars.colors.black[0],
 }) + ' ' + buttonDefault;
+
+export const buttonNav = style({
+    backgroundColor: vars.colors.black[0],
+});

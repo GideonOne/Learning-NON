@@ -85,3 +85,8 @@ export const buttonLogout = style({
     backgroundColor: vars.colors.black[2],
     right: 0
 }) + ' ' + buttonDefault
+
+export const errorMessage = style({
+    color: vars.colors.red[0],
+    fontSize: 12
+})

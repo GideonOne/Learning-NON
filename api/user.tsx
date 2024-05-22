@@ -2,14 +2,14 @@ import axios from 'axios';
 import { endpoints } from '../config/endPoints';
 
 interface UpdateUser {
-    createdAt: Date;
+    createdAt: string;
     name: string;
     lastName: string;
     emailPassword: string;
     image: string;
 }
 
-export const updateUser = async (data: UpdateUser): Promise<UpdateUser> => {
+const updateUser = async (data: UpdateUser): Promise<UpdateUser> => {
     const response = await axios.put<UpdateUser>(
         endpoints.updateUser(data.emailPassword.split('&')[0], data.emailPassword.split('&')[1]),
         data,
@@ -21,4 +21,6 @@ export const updateUser = async (data: UpdateUser): Promise<UpdateUser> => {
     );
 
     return response.data;
-};
+}
+
+export { updateUser };

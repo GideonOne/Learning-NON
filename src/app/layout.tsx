@@ -1,26 +1,30 @@
+"use client"
+
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import './globals.css'
 import '@mantine/core/styles.css';
+import { useEffect, useState } from "react";
 import { theme } from "../../theme"
-
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { AppProvider } from "../../context/appContext";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const inter = Inter({ subsets: ["latin"] });
-const queryClient = new QueryClient();
-
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "E-Comm",
   description: "E-Comm Application",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
+  const [queryClient, setQueryClient] = useState<QueryClient | null>(null);
+
+  useEffect(() => {
+    const client = new QueryClient();
+    setQueryClient(client);
+    return () => {
+      client.clear();
+    };
+  }, []);
+
   return (
     <html lang="en">
       <head>
@@ -33,13 +37,15 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {/* <QueryClientProvider client={queryClient}> */}
-          <MantineProvider theme={theme}>
-            <AppProvider>
-              {children}
-            </AppProvider>
-          </MantineProvider>
-        {/* </QueryClientProvider> */}
+        {queryClient && (
+          <QueryClientProvider client={queryClient}>
+            <MantineProvider theme={theme}>
+              <AppProvider>
+                {children}
+              </AppProvider>
+            </MantineProvider>
+          </QueryClientProvider>
+        )}
       </body>
     </html>
   );

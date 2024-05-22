@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Input, Modal, PasswordInput, TextInput } from '@mantine/core';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
@@ -35,16 +35,22 @@ const LoginModal: React.FC<AuthModalProps> = ({ opened, onClose }) => {
 
     const { dispatch } = useAppContext();
 
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        try {
-            const response = await loginUser(data.email, data.password);
-            const user = response;
-            dispatch({ type: 'LOGIN', payload: user });
+    const mutation = useMutation({
+        mutationFn: (data: Inputs) => {
+            return loginUser(data.email, data.password);
+        },
+        onSuccess: (data) => {
+            dispatch({ type: 'LOGIN', payload: data });
             onClose();
-        } catch (err) {
-            console.error('Login failed:', err);
+        },
+        onError: (error) => {
+            console.error('Login failed:', error.message);
             alert('Login failed, your email and password is not valid');
         }
+    })
+
+    const onSubmit: SubmitHandler<Inputs> = async (input) => {
+        mutation.mutate(input);
     };
 
     const iconEmail = <IconAt size={16} />

@@ -8,28 +8,38 @@ import { IconUser, IconAt, IconPhone } from "@tabler/icons-react"
 import { useAppContext } from "../../../context/appContext"
 import { redirect } from "next/navigation"
 import { updateUser } from "../../../api/user"
+import { vars } from "../../../theme"
+import { useMutation } from "@tanstack/react-query"
+import { z } from "zod"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { vars } from "../../../theme"
 
-interface User {
-    createdAt: Date;
-    name: string;
-    lastName: string;
-    emailPassword: string;
-    image: string;
-}
+const schema = z.object({
+    createdAt: z.string().datetime(),
+    name: z.string()
+        .min(1, { message: 'First name cannot be empty' }),
+    lastName: z.string()
+        .min(1, { message: 'Last name cannot be empty' }),
+    emailPassword: z.string(),
+    image: z.string(),
+});
+
+type Inputs = z.infer<typeof schema>;
 
 const Profile: React.FC = () => {
 
-    const { state, dispatch } = useAppContext();
+    const { dispatch } = useAppContext();
+    const userJson = localStorage.getItem("user");
+    const storedUser = userJson ? JSON.parse(userJson) : null;
+    const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
+        resolver: zodResolver(schema)
+    });
 
     useEffect(() => {
-        if (!state.user) {
+        if (!storedUser) {
             redirect("/")
         }
-    }, [state.user])
+    }, [storedUser])
 
     const Logout = () => {
         dispatch({ type: "LOGOUT" })
@@ -41,37 +51,38 @@ const Profile: React.FC = () => {
     };
 
     const [userData, setUserData] = useState({
-        createdAt: state.user?.createdAt ?? new Date(),
-        name: state.user?.name ?? "",
-        lastName: state.user?.lastName ?? "",
-        emailPassword: state.user?.emailPassword ?? "",
-        image: state.user?.image ?? ""
+        createdAt: storedUser?.createdAt ?? new Date(),
+        name: storedUser?.name ?? "",
+        lastName: storedUser?.lastName ?? "",
+        emailPassword: storedUser?.emailPassword ?? "",
+        image: storedUser?.image ?? ""
     });
 
-    const setCreatedAt = (value: Date) => setUserData(data => ({ ...data, createdAt: value }));
     const setName = (value: string) => setUserData(data => ({ ...data, name: value }));
     const setLastName = (value: string) => setUserData(data => ({ ...data, lastName: value }));
-    const setEmailPassword = (value: string) => setUserData(data => ({ ...data, emailPassword: value }));
-    const setImage = (value: string) => setUserData(data => ({ ...data, image: value }));
 
-
-    const editUser = async (data: User) => {
-        try {
-            const response = await updateUser(data);
-            const user = response;
-            dispatch({ type: 'UPDATE_USER', payload: user });
-
-        } catch (err) {
-            console.error('Update user failed:', err);
+    const mutation = useMutation({
+        mutationFn: (data: Inputs) => {
+            return updateUser(data);
+        },
+        onSuccess(data) {
+            dispatch({ type: 'UPDATE_USER', payload: data });
+            setEditMode(false)
+        },
+        onError(error) {
+            console.error('Update user failed:', error.message);
         }
-        finally {
-            setEditMode(false);
-        }
+    })
+
+    const onSubmit: SubmitHandler<Inputs> = async (input) => {
+        // console.log(input);
+        
+        mutation.mutate(input);
     };
 
     return (
         <CustomLayout>
-            <section className={classes.body}>
+            <form className={classes.body} onSubmit={handleSubmit(onSubmit)}>
                 <div className={classes.upperPart}>
                     <img className={classes.profileImage} src={userData.image} alt="it's me" />
                     <div className={classes.upperPartInfoContainer}>
@@ -96,17 +107,19 @@ const Profile: React.FC = () => {
                 <hr />
                 <div className={classes.lowerPart}>
                     <div className={classes.inputContainer}>
-                        <div className={classes.textTitle}>First Name</div>
+                        <div className={classes.textTitle}>First Name
+                            {errors.name && <span className={classes.errorMessage}> *{errors.name.message}</span>}
+                        </div>
                         <div className={classes.inputSubContainer}>
-                            <Input size="md" placeholder="Your First Name" value={userData.name} className={classes.textInput} disabled={!editMode} onChange={(e) => setName(e.target.value)} />
-
+                            <Input {...register("name")} size="md" placeholder="Your First Name" value={userData.name} className={classes.textInput} disabled={!editMode} onChange={(e) => setName(e.target.value)} />
                         </div>
                     </div>
                     <div className={classes.inputContainer}>
-                        <div className={classes.textTitle}>Last Name</div>
+                        <div className={classes.textTitle}>Last Name
+                            {errors.lastName && <span className={classes.errorMessage}> *{errors.lastName.message}</span>}
+                        </div>
                         <div className={classes.inputSubContainer}>
-                            <Input size="md" placeholder="Your Last Name" value={userData.lastName} className={classes.textInput} disabled={!editMode} onChange={(e) => setLastName(e.target.value)} />
-                            {/* <Button color="black" size="md" className={classes.buttonEdit} variant="filled">Edit</Button> */}
+                            <Input {...register("lastName")} size="md" placeholder="Your Last Name" value={userData.lastName} className={classes.textInput} disabled={!editMode} onChange={(e) => setLastName(e.target.value)} />
                         </div>
                     </div>
                     <div className={classes.inputContainer}>
@@ -125,10 +138,12 @@ const Profile: React.FC = () => {
                         <div className={classes.textTitle}>Phone</div>
                         <div className={classes.inputSubContainer}>
                             <Input size="md" placeholder="Your Phone Number" className={classes.textInput} disabled />
-                            {/* <Button color="black" size="md" className={classes.buttonEdit} variant="filled">Edit</Button> */}
                         </div>
                     </div>
                 </div>
+                <input type="hidden" {...register("emailPassword")} value={userData.emailPassword} />
+                <input type="hidden" {...register("image")} value={userData.image} />
+                <input type="hidden" {...register("createdAt")} value={userData.createdAt} />
                 {!editMode && (
                     <Button
                         color="black"
@@ -147,7 +162,7 @@ const Profile: React.FC = () => {
                             size="md"
                             className={classes.buttonEdit}
                             variant="filled"
-                            onClick={() => { editUser(userData) }} // Confirm changes
+                            type="submit" // Confirm changes
                         >
                             Confirm
                         </Button>
@@ -162,7 +177,7 @@ const Profile: React.FC = () => {
                         </Button>
                     </Group>
                 )}
-            </section>
+            </form>
         </CustomLayout>
     )
 }
