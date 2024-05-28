@@ -13,6 +13,7 @@ const metadata: Metadata = {
   title: "E-Comm",
   description: "E-Comm Application",
 };
+const queryClient = new QueryClient();
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   const [queryClient, setQueryClient] = useState<QueryClient | null>(null);

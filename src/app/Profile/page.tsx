@@ -75,8 +75,6 @@ const Profile: React.FC = () => {
     })
 
     const onSubmit: SubmitHandler<Inputs> = async (input) => {
-        // console.log(input);
-        
         mutation.mutate(input);
     };
 
